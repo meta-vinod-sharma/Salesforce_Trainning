@@ -1,9 +1,11 @@
 public class AccountContact {
-   
-   public static String checkContact(ID cntId){
+   /*
+    *Function checkContactsInAccount takes an Contact Id As parameter and return List of all contact ids linked to that account
+    */
+   public static String checkContactsInAccount(ID cntId){
        
        ID accountId = [SELECT Account.ID  FROM Contact WHERE ID =:cntId][0].Account.ID;
-       Account acc = [SELECT Name , ContactIds__c FROM Account WHERE ID =: accountId ];
+       Account acc = [SELECT Name , ContactIds__c FROM Account WHERE ID =: accountId];
        String cntIds = acc.ContactIds__c;
        
        if(cntIds == null){
