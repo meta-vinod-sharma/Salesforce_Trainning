@@ -15,7 +15,8 @@ trigger ClassTrigger on Class__c (before delete,after update) {
     if(trigger.isAfter){
         for(Class__c cls : [select Id,Custom_Status__c from Class__c where Id in : Trigger.New and Custom_Status__c = 'Reset']){
             if(trigger.oldMap.get(cls.id).Custom_Status__c != cls.Custom_Status__c){
-                delete cls;
+                 List<Student__c> studentList = [SELECT Id FROM Student__c WHERE Class__c = :cls.id];
+                 delete studentList;
             }
         }
     }
