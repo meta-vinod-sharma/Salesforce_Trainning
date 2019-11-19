@@ -3,7 +3,7 @@
  * IF class Status is changed to Reset then delete that class
  */
 
-trigger ClassTrigger on Class__c (before insert,after update) {
+trigger ClassTrigger on Class__c (before delete,after update) {
     if(trigger.isBefore){
         List<Class__c> cls = [SELECT id, (Select Class__c from students__r where sex__c = 'Female') From class__c where id IN :trigger.old];
         for(Class__c cls1: cls){
