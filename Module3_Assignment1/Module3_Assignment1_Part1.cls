@@ -16,9 +16,9 @@ public class Module3_Assignment1_Part1 {
     
     public static Map<String, Set<ID>> studentClassMap(){
         List<Student__c> student = new List<Student__c>();
-        student = [SELECT Class__c,Id FROM Student__c];
+        student = [SELECT Class__c,Class__r.Id,Id FROM Student__c];
         List<Class__c> classes = new List<Class__c>();
-        classes = [SELECT id FROM Class__c];
+        classes = [SELECT id,Name FROM Class__c];
         Map<String, Set<ID>> studentClassMap = new Map<String, Set<ID>>();
         for(integer i = 0; i < classes.size(); i++){
             Id classId = classes[i].id;
