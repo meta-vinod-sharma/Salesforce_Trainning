@@ -24,7 +24,7 @@ public class TestModule3Part1 {
         insert stds;
         Map<String, Set<ID>> studentClassMap = Module3_Assignment1_Part1.studentClassMap();
         Set<id> sts = studentClassMap.get(cls.Name);
-        System.assertEquals(20, sts.size());
+        System.assertEquals(stds.size(), sts.size());
     }
     
     @isTest
