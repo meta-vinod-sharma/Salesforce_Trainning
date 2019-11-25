@@ -1,0 +1,12 @@
+<apex:page controller="StudentPdfController" renderAs="PDF">
+    <apex:pageBlock title="Student Detail">
+        <apex:pageBlockTable value="{! students}" var="st">
+            <apex:column value="{! st.FirstName__c }"/>
+            <apex:column value="{! st.Name }"/>
+            <apex:column value="{! st.Age__c }"/>
+            <apex:column value="{! st.DOB__c }"/>
+            <apex:column value="{! st.Sex__c }"/>
+            <apex:column value="{! st.Spouse__c }"/>
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+</apex:page>

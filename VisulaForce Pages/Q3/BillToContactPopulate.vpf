@@ -1,0 +1,16 @@
+<apex:page controller="OpportunityController">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:selectRadio value="{! BillToContactFormula}">
+                <apex:selectOptions value="{! contacts}">
+                </apex:selectOptions>
+            </apex:selectRadio>
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!save}" value="Save" />
+                <apex:commandButton action="{!clear}" value="Clear" />
+                <apex:commandButton action="{!cancel}" value="Cancle" />
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+    
+</apex:page>

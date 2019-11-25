@@ -1,0 +1,46 @@
+<apex:page Controller="AccountController">
+    <apex:form >
+        <apex:pageBlock title="Accounts Search" >
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!getAccounts}" value="Search"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection columns="2">
+                <apex:inputtext value="{! billingCity1 }" Label="Billing City"/>
+                <apex:inputtext value="{! billingState1 }" Label="Billing State"/>
+                <apex:inputtext value="{! billingCountry1 }" Label="Billing Country"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+    <apex:form >
+        <apex:pageBlock id="Account_search" >
+            <apex:pageBlockTable value="{! accs }" var="acc">
+                <apex:column value="{! acc.Name }"/>
+                <apex:column value="{! acc.BillingCity }"/>
+                <apex:column value="{! acc.BillingState  }"/>
+                <apex:column value="{! acc.BillingCountry }"/>                
+            </apex:pageBlockTable>
+            
+            <table style="width: 100%"><tr>
+                <td>
+                    Page: <apex:outputText value=" {!setCon.PageNumber} of {! CEILING(setCon.ResultSize / setCon.PageSize) }"/>
+                </td>
+                <td align="center">
+                    <apex:commandLink value="First" action="{!First}" />
+                    <apex:commandLink action="{! Previous }" value="« Previous" rendered="{! setCon.HasPrevious }"/>
+                     &nbsp;&nbsp;  
+                    <apex:commandLink action="{! Next }" value="Next »" rendered="{! setCon.HasNext }"/>
+                    <apex:commandLink value="Last" action="{!Last}" />
+                </td>
+                <td align="right">
+                    Records per page:
+                    <apex:selectList value="{! setCon.PageSize }" size="1">
+                        <apex:selectOption itemValue="5" itemLabel="5"/>
+                        <apex:selectOption itemValue="10" itemLabel="10"/>
+                        <apex:actionSupport event="onchange" reRender="Account_search"/>
+                    </apex:selectList>
+                </td>
+                </tr>
+            </table>            
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
