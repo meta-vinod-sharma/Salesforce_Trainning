@@ -55,9 +55,9 @@ public class TestShoppingCartApplicationController {
             cartProducts.add(prodWrap[i]);
         }
         spcon.addProductToCart();
-        spcon.prodWrapListId = spcon.cartprodWrapList[0].product.Id;
+        spcon.prodId = spcon.cartProducts[0].product.Id;
         spcon.deleteProduct();
-        system.assertEquals( 4 ,spcon.cartprodWrapList.size(), 'Item not removed from cart');
+        system.assertEquals( 4 ,spcon.cartProducts.size(), 'Item not removed from cart');
     }
     
     @isTest
