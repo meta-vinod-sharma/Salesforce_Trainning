@@ -195,6 +195,10 @@ public class ShoppingCartApplicationController {
        ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Please enter Valid Quantity'));
                 pro.quantity = previousQuantity;
             }
+            if(pro.quantity > pro.product.Quantity_Available__c){
+       ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Please enter Quantity Less Then or equal to '+ pro.product.Quantity_Available__c));
+                pro.quantity = previousQuantity;
+            }
         }
         
         for(integer i =0 ;i < prodWrapList.size();i++){
