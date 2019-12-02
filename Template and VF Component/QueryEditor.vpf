@@ -1,0 +1,20 @@
+<apex:page controller="QueryEditorController">
+    <style>
+        .editor{
+            width : 600px;
+            margin : 50px;
+        }
+    </style>
+    
+    
+    <apex:form >
+        <apex:outputPanel id="QueryEditor">
+            <apex:inputTextarea value="{!query}"  styleClass="editor" html-placeholder="Enter Query" />
+            <apex:commandButton value="Execute" action="{!executeQuery}" reRender="result,QueryEditor" />
+            <apex:pageMessages id="showErrorMsg"></apex:pageMessages>
+        </apex:outputPanel>
+        <apex:outputPanel id="result" >
+            <c:Query_Editor rendered="{!renderResult}" query="{!query}" />
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>
