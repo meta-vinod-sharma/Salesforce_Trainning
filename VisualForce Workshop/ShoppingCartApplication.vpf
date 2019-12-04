@@ -3,7 +3,7 @@
         <apex:pageBlock id="Purchase_Order_List" title="Purchase Order History">
             <apex:pageBlockSection >
                 <apex:pageBlockTable value="{!purchaseOrders}" var="PO">
-                    <apex:column value="{!PO.ID}" headerValue="Product ID"/>
+                    <apex:column value="{!PO.ID}" headerValue="PO ID"/>
                     <apex:column headerValue="Total Amount"  >
                     <apex:facet name="header">
                         <apex:commandLink value="Amount" action="{!sortByOrderPrice}" reRender="Purchase_Order_List" />
@@ -21,30 +21,33 @@
             <apex:pageBlockButtons location="Bottom" >
                 <apex:commandButton action="{!addPurchase}" value="Add New Purchase" />
             </apex:pageBlockButtons>
-            <table style="width: 15%"><tr>
+            <apex:outputPanel rendered="{!IF(CEILING(setCon.ResultSize / setCon.PageSize) > 1 ,true,false)}" >
+                  <table style="width: 15%">
+                      <tr>
                 <td>
                     Page: <apex:outputText value=" {!setConPurchaseHistory.PageNumber} of {! CEILING(setConPurchaseHistory.ResultSize / setConPurchaseHistory.PageSize) }"/>
                 </td>
                 <td align="left">
                     <apex:commandLink value="First" action="{!setConPurchaseHistory.First}" reRender="Purchase_Order_List" />
-                    <apex:commandLink action="{! setConPurchaseHistory.Previous }" value="« Previous" rendered="{! setConPurchaseHistory.HasPrevious }" reRender="Purchase_Order_List"/>
+                    <apex:commandLink action="{! setConPurchaseHistory.Previous }" value="Â« Previous" rendered="{! setConPurchaseHistory.HasPrevious }" reRender="Purchase_Order_List"/>
                     &nbsp;&nbsp;  
-                    <apex:commandLink action="{! setConPurchaseHistory.Next }" value="Next »" rendered="{! setConPurchaseHistory.HasNext }" reRender="Purchase_Order_List"/>
+                    <apex:commandLink action="{! setConPurchaseHistory.Next }" value="Next Â»" rendered="{! setConPurchaseHistory.HasNext }" reRender="Purchase_Order_List"/>
                     <apex:commandLink value="Last" action="{!setConPurchaseHistory.Last}" reRender="Purchase_Order_List" />
                 </td>
                 </tr>
-            </table>
+            </table>  
+            </apex:outputPanel>            
         </apex:pageBlock>
     </apex:form>
     <apex:form >
         <apex:pageBlock id="Product" title="Products" rendered="{!renderProduct}">
             <apex:inputtext value="{! productSearch }"  html-placeholder="Search Products">
-                <apex:actionSupport event="onkeyup" action="{!getProductsSearch}" reRender="productTable" />
+                <apex:actionSupport event="onkeyup" action="{!getProductsSearch}" reRender="Product" />
             </apex:inputtext>
             <apex:pageBlockButtons html-align="right" location="top">
                 <apex:commandButton action="{!addProductToCart}" value="Add To Cart" />
             </apex:pageBlockButtons>
-            <apex:pageBlockTable value="{!Products}" var="pro" id="productTable">
+            <apex:pageBlockTable value="{!products}" var="pro" id="productTable">
                 <apex:column >
                     <apex:inputCheckbox value="{!pro.selected}" id="checkedone" disabled="{!If(pro.product.Quantity_Available__c = 0 || pro.product.Quantity_Available__c = null,true,false)}">
                         <apex:actionSupport event="onclick" action="{!GetSelected}" reRender="Product"  />
@@ -55,25 +58,28 @@
                 <apex:column value="{! pro.product.Price_Per_Unit__c  }"/>
                 <apex:column value="{! pro.product.Quantity_Available__c }"/>                
             </apex:pageBlockTable>
-            <table style="width: 15%"><tr>
-                <td>
-                    Page: <apex:outputText value=" {!setCon.PageNumber} of {! CEILING(setCon.ResultSize / setCon.PageSize) }"/>
-                </td>
-                <td align="left">
-                    <apex:commandLink value="First" action="{!setCon.First}" reRender="productTable"/>
-                    <apex:commandLink action="{! setCon.Previous }" value="« Previous" rendered="{! setCon.HasPrevious }" reRender="productTable"/>
-                    &nbsp;&nbsp;  
-                    <apex:commandLink action="{!setCon.next }" value="Next »" rendered="{!setCon.HasNext }" reRender="Product" />
-                    <apex:commandLink value="Last" action="{!setCon.Last}" reRender="productTable"/>
-                </td>
-                </tr>
-            </table>
+            <apex:outputPanel id="pagination" rendered="{! IF(tempProducts.size >= setCon.PageSize ,true,false)  }" >
+                <table style="width: 15%"><tr>
+                    <td>
+                        Page: <apex:outputText value=" {!setCon.PageNumber} of {! CEILING(setCon.ResultSize / setCon.PageSize) }"/>
+                    </td>
+                    <td align="left">
+                        <apex:commandLink value="First" action="{!setCon.First}" reRender="Product"/>
+                        <apex:commandLink action="{! setCon.Previous }" value="Â« Previous" rendered="{! setCon.HasPrevious }" reRender="product"/>
+                        &nbsp;&nbsp;  
+                        <apex:commandLink action="{!setCon.next }" value="Next Â»" rendered="{!setCon.HasNext }" reRender="Product" />
+                        <apex:commandLink value="Last" action="{!setCon.Last}" reRender="Product"/>
+                    </td>
+                    </tr>
+                </table>
+            </apex:outputPanel>
         </apex:pageBlock>
     </apex:form>
     
     <apex:form >
-        <apex:pageBlock id="cart_Items" title="Cart Items" rendered="{!renderCart}">
+        <apex:pageBlock id="cart_Items" title="Cart Items" rendered="{!renderCart }" >
             <apex:pageMessages id="showmsg"></apex:pageMessages>
+            
             <apex:pageBlockButtons html-align="center" location="Bottom">
                 <apex:commandButton action="{!generateInvoice}" onclick="" value="CheckOut" />
             </apex:pageBlockButtons>
@@ -99,7 +105,7 @@
                     </apex:outputPanel>
                 </apex:column>
                 <apex:column >
-                    <apex:commandLink action="{!deleteProduct}" value="delete" reRender="cart_Items,Product">
+                    <apex:commandLink action="{!deleteProduct}" value="delete" reRender="cart_Items,Product" >
                         <apex:param name="ProdId" assignTo="{!ProdId}" value="{!cp.product.Id}"/>
                     </apex:commandLink>
                 </apex:column>
@@ -130,4 +136,4 @@
             </apex:pageBlockTable>
         </apex:pageBlock>
     </apex:form>    
-</apex:page>
+</apex:page>         
