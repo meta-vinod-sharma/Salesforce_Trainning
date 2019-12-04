@@ -11,6 +11,7 @@ public class ShoppingCartApplicationController {
     public Decimal grandTotal{get;set;}
     public map<id,ProductWrapper> productMap;
     public String sortDirection {get;set;}
+    public Decimal totalAmount;
     
     
     
@@ -32,13 +33,13 @@ public class ShoppingCartApplicationController {
         cart = new Cart_Items__c();
         renderProduct = false;
         renderCart = false;
+        totalAmount = 0.0;
         renderInvoice = false;
         MakeItReadOnly = false;
         sortDirection = 'asc';
         productMap = new map<id,ProductWrapper>();
         for(product2 product : getProductRecords() ){
             productMap.put(product.Id, new ProductWrapper(product));
-            system.debug(productMap.get(product.Id));
         }
     }
     /*
@@ -122,16 +123,23 @@ public class ShoppingCartApplicationController {
     }
     
     public void addPurchase(){
+        renderInvoice = false;
+        renderCart = false;
         renderProduct = true;
+        cartprodWrapList.clear();
+        cartProducts.clear();
+        tempProducts.clear();
+        for(Product2 product : (List<Product2>)setcon.getRecords()){
+            tempProducts.add(productMap.get(product.Id).product);
+        }
+        System.debug(tempProducts);
     }
     /*
      * REturns list of product wrapper which stores quantity of product and product
      */
     Public List<ProductWrapper> getProducts() {
         prodWrapList.clear();
-        system.debug(productMap.values());
         for(Product2 product : (List<Product2>)setcon.getRecords()){
-            
             prodWrapList.add(productMap.get(product.Id));
         }
         return prodWrapList;
@@ -148,6 +156,7 @@ public class ShoppingCartApplicationController {
                 tempProducts.add(productMap.get(productId).product);
             }
         }
+        setCon = NULL;
         setCon = new ApexPages.StandardSetController(tempProducts);
     }
     
@@ -189,14 +198,14 @@ public class ShoppingCartApplicationController {
       * Update Available quantity of Product
       */   
     public void updateQuantity(){
-        System.debug(previousQuantity);
         for(ProductWrapper pro : cartProducts){
-            if(pro.quantity == 0 || pro.quantity < 0){
+            if(pro.quantity == 0 || pro.quantity < 0 || pro.quantity == NULL){
        ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Please enter Valid Quantity'));
                 pro.quantity = previousQuantity;
             }
-            if(pro.quantity > pro.product.Quantity_Available__c){
-       ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Please enter Quantity Less Then or equal to '+ pro.product.Quantity_Available__c));
+            if(pro.quantity > pro.product.Quantity_Available__c + previousQuantity){
+                Decimal temp = pro.product.Quantity_Available__c + previousQuantity;
+       ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'Please enter Quantity Less Then or equal '+ temp));
                 pro.quantity = previousQuantity;
             }
         }
@@ -211,7 +220,6 @@ public class ShoppingCartApplicationController {
     
     public void generateInvoice(){
         renderInvoice = true;
-        renderCart = false;
         renderProduct = false;
         MakeItReadOnly = true;
         grandTotal = 0.0;
@@ -223,26 +231,38 @@ public class ShoppingCartApplicationController {
      * Deletes Product from cart
      */
     public void deleteProduct() {
-        Integer pos;
+        Integer pos1;
+        Integer pos2;
         for(Integer j = 0;j < cartProducts.size();j++){
             if(cartProducts[j].product.id == ProdId){
-                pos = j;
+                pos1 = j;
+                break;
+            }
+        }
+        
+        for(Integer k = 0;k < cartprodWrapList.size();k++){
+            if(cartprodWrapList[k].product.id == ProdId){
+                pos2 = k;
                 break;
             }
         }
         for(integer i =0 ;i < prodWrapList.size();i++){
             if(prodWrapList[i].product.Id == ProdId){
-                prodWrapList[i].product.Quantity_Available__c += cartProducts[pos].quantity;
-                cartProducts.remove(pos);
+                prodWrapList[i].product.Quantity_Available__c += cartProducts[pos1].quantity;
+                cartProducts.remove(pos1);
+                cartprodWrapList.remove(pos2);
                 break;
             }
         }
+        if(cartprodWrapList.size() == 0){
+            renderCart = false;
+        }
+        
     }
     /*
      * Returns total of cart value
      */
     public Decimal getTotal(){
-        Decimal totalAmount = 0.0;
         for(ProductWrapper product : cartProducts){
             totalAmount += product.Product.Price_Per_Unit__c * product.quantity;
         }
