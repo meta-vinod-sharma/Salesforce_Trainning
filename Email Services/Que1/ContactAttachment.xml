@@ -1,0 +1,37 @@
+<Contacts>
+	<Contact>	
+		<firstName>VIN1</firstName>
+		<lastName>Sharma</lastName>
+                <department>CSE</department>
+                <email>xyz12@metacube.com</email>
+                <subject>Math</subject>
+        </Contact>
+	<Contact>
+		<firstName>VIN2</firstName>
+		<lastName>Sharma</lastName>
+                <department>ECE</department>
+                <email>xyz123@metacube.com</email>
+                <subject>English</subject>
+	</Contact>
+	<Contact>
+		<firstName>VIN3</firstName>
+		<lastName>Sharma</lastName>
+                <department>ME</department>
+                <email>xyz1234@metacube.com</email>
+                <subject>English</subject>
+	</Contact>
+        <Contact>
+		<firstName>VIN4</firstName>
+		<lastName>Sharma</lastName>
+                <department>EE</department>
+                <email>xyz12345@metacube.com</email>
+                <subject>English</subject>
+	</Contact>
+        <Contact>
+		<firstName>VIN5</firstName>
+		<lastName>Sharma</lastName>
+                <department>CIVIL</department>
+                <email>xyz123456@metacube.com</email>
+                <subject>English</subject>
+	</Contact>
+</Contacts>
