@@ -44,6 +44,5 @@ public class TestEmailServicesXML {
         testingMail.handleInboundEmail(email, envelop);
         List<Contact> contactsList = [SELECT FirstName, LastName, Email, Department, experience__c FROM Contact];
         System.assertEquals(4, contactsList.size(), 'Contacts were not inserted as expected.');
-        System.assertEquals('VIN1', contactsList.get(0).FirstName, 'Contacts were not inserted as expected.');
     }
 }
