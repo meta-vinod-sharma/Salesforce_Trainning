@@ -10,15 +10,8 @@ public class QueryEditorController {
     public void executeQuery() {
         if(String.isBlank(query)) {
             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Query can not be empty'));
+            renderResult = false;
             return;
-        }else {
-            try {
-                Database.query(query);
-            }catch(QueryException ex) {
-                ApexPages.addMessages(ex);
-                return;
-            }
-            
         }
         renderResult = true;
     }
