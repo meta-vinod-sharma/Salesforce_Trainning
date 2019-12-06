@@ -5,19 +5,27 @@ public class FetchRecords {
     public List<string> lstFields {get; set;}
     public String fName{get;set;}
     public String direction;
+    public boolean RenderMessage{get;set;}
     
     public FetchRecords() {
         QueryToExecute = '';
         finalQuery = '';
         setCon = null ;
         direction = 'asc';
+        RenderMessage = false;
     }
     
     public ApexPages.StandardSetController setCon {
         get {
             if(setCon == null) {
-                setCon = new ApexPages.StandardSetController(Database.query(finalQuery));
-                setCon.setPageSize(5);
+                try {
+                    setCon = new ApexPages.StandardSetController(Database.query(finalQuery));
+                    setCon.setPageSize(5);
+                }catch(QueryException ex) {
+                    ApexPages.addMessage(new Apexpages.Message(ApexPages.Severity.WARNING,'Enter valid Query'));
+                    RenderMessage = true;
+                }
+
             }
             return setCon;
         }
@@ -33,12 +41,17 @@ public class FetchRecords {
             this.QueryToExecute = QueryString;
             this.setCon = null;
             finalQuery = QueryToExecute;
+            RenderMessage = false;
         } 
     }
     
     public List<Sobject> getRecordType() {
-        
-        List<Sobject> QueryResult = setCon.getRecords();
+        List<Sobject> QueryResult;
+        try{
+            QueryResult = setCon.getRecords();
+        }catch(Exception ex){
+            return null;
+        }
         Set<string> setFields = new Set<String>();
         for(integer i = 0 ; i < QueryResult.size() ; i++){
             setFields.addAll(QueryResult[i].getPopulatedFieldsAsMap().keySet());
