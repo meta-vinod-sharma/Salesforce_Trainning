@@ -9,7 +9,6 @@
    			</apex:repeat>
             var result = sforce.connection.deleteIds([selectedStudentsForDeletion]);
             if (result[0].getBoolean("success")) {
-                alert("Deletion successfully");
                 location.replace("https://ap15.salesforce.com/a04/o");
             } else {
                 alert("Deletion failed ");
@@ -23,7 +22,7 @@
                 <apex:column value="{!st.FirstName__c}"/>
             	<apex:column value="{!st.Name}"/>
             </apex:pageBlockTable> 
-            <apex:commandButton value="delete" onclick="deleteStudents();return false;" />
+            <apex:commandButton value="delete" onclick="deleteStudents();return false;" disabled="{! If(selected == NULL , TRUE, FALSE)}" />
             <apex:commandButton value="Cancel" action="{!Cancel}" />
         </apex:pageBlock>
     
