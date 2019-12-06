@@ -5,19 +5,21 @@
             <apex:repeat value="{!lstFields}" var="fld">
                 <apex:column value="{!record[fld]}" >
                     <apex:facet name="header">
-                       <apex:commandLink action="{!SortData}" value="{!fld}" rerender="result">
-                           <apex:param value="{!fld}" name="column" assignTo="{!fName}" ></apex:param>
-                       </apex:commandLink>
+                        <apex:commandLink action="{!SortData}" value="{!fld}" rerender="result">
+                            <apex:param value="{!fld}" name="column" assignTo="{!fName}" ></apex:param>
+                        </apex:commandLink>
                     </apex:facet>
                 </apex:column>
             </apex:repeat>    
         </apex:pageblockTable>
         <div> 
-            <apex:commandButton value="First" action="{!setCon.First}" disabled="{!!setCon.hasPrevious}" rerender="result" />
-            <apex:commandButton value="Previous" action="{!setCon.Previous}" disabled="{!!setCon.hasPrevious}" reRender="result" />
-            <apex:commandButton value="Next" action="{!setCon.Next}" disabled="{!!setCon.hasNext}" rerender="result" />
-            <apex:commandButton value="Last" action="{!setCon.Last}" disabled="{!!setCon.hasNext}" rerender="result" />
-            Page: <apex:outputText value=" {!setCon.PageNumber} of {! CEILING(setCon.ResultSize / setCon.PageSize) }"/>
+            <apex:outputPanel rendered="{!if(recordType != NULL,true,false)}">
+                <apex:commandButton value="First" action="{!setCon.First}" disabled="{!!setCon.hasPrevious}" rerender="result" />
+                <apex:commandButton value="Previous" action="{!setCon.Previous}" disabled="{!!setCon.hasPrevious}" reRender="result" />
+                <apex:commandButton value="Next" action="{!setCon.Next}" disabled="{!!setCon.hasNext}" rerender="result" />
+                <apex:commandButton value="Last" action="{!setCon.Last}" disabled="{!!setCon.hasNext}" rerender="result" />
+                Page: <apex:outputText value=" {!setCon.PageNumber} of {! CEILING(setCon.ResultSize / setCon.PageSize) }"/>
+            </apex:outputPanel>
         </div>
     </apex:pageBlock>
 </apex:component>
