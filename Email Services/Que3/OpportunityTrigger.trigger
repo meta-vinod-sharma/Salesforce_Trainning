@@ -27,7 +27,7 @@ trigger OpportunityTrigger on Opportunity (before update, after update)
             Opportunity oldOpportunity = Trigger.oldMap.get(opp.Id);
             if(opp.StageName != oldOpportunity.StageName)
             {
-                EmailSendOnOppUpdate.sendEmailToOwner(opp);
+                EmailSendOnOppUpdate.sendEmailToOwner(opp,oldOpportunity.StageName,opp.StageName);
             }
         }
     }
