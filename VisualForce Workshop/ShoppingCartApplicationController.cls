@@ -1,5 +1,4 @@
 public class ShoppingCartApplicationController {
-    public List<Product2> productList{get; set;}
     public boolean renderProduct{get;set;}
     public boolean renderCart{get;set;}
     public boolean renderInvoice{get;set;}  
@@ -132,7 +131,6 @@ public class ShoppingCartApplicationController {
         for(Product2 product : (List<Product2>)setcon.getRecords()){
             tempProducts.add(productMap.get(product.Id).product);
         }
-        System.debug(tempProducts);
     }
     /*
      * REturns list of product wrapper which stores quantity of product and product
@@ -176,6 +174,7 @@ public class ShoppingCartApplicationController {
     }
 
     public void addProductToCart(){
+        MakeItReadOnly = false;
         renderCart = true;
         for(ProductWrapper pro : cartProducts){
             if(pro.product.Quantity_Available__c > 0){
@@ -262,15 +261,15 @@ public class ShoppingCartApplicationController {
     /*
      * Returns total of cart value
      */
-    public Decimal getTotal(){
+    public void getTotal(){
         for(ProductWrapper product : cartProducts){
             totalAmount += product.Product.Price_Per_Unit__c * product.quantity;
         }
-        return totalAmount;
     } 
     
     public void addCartToPurchaseOrders(){
-        PurchaseOrder__c purchaseOrder = new PurchaseOrder__c(Total__c = getTotal(), Order_Status__c = 'Pending');
+        getTotal();
+        PurchaseOrder__c purchaseOrder = new PurchaseOrder__c(Total__c = totalAmount, Order_Status__c = 'Pending');
         insert purchaseOrder;
         List<Cart_Items__c> cartItemList = new List<Cart_Items__c>();
         List<Product2> productList = new List<Product2>();
