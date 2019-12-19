@@ -24,7 +24,6 @@ public class ShoppingCartController {
     
     public ShoppingCartService shoppingCartServiceObj;
     public ProductWrapper productWrapperObj;
-    public ProductsSelector productsSelectorObj;
 
     /* 
      * Constructor for Initialization
@@ -32,7 +31,6 @@ public class ShoppingCartController {
     public ShoppingCartController() {
         shoppingCartServiceObj = new ShoppingCartService();
         productWrapperObj = new ProductWrapper();
-        productsSelectorObj = new ProductsSelector();
         prodWrapList= new List<ProductWrapper>();
         cartprodWrapList = new List<ProductWrapper>();
         tempProducts = new List<Product2>();
@@ -45,7 +43,7 @@ public class ShoppingCartController {
         MakeItReadOnly = false;
         sortDirection = 'asc';
         productMap = new map<id,ProductWrapper>();
-        for(product2 product : productsSelectorObj.getAllProducts() ){
+        for(product2 product : new ProductsSelector().getAllProducts() ){
             productMap.put(product.Id, new ProductWrapper(product));
         }
     }
@@ -53,7 +51,7 @@ public class ShoppingCartController {
     public ApexPages.StandardSetController setCon {        
         get {
             if(setCon == null) {
-                setCon = new ApexPages.StandardSetController(productsSelectorObj.getAllProducts());
+                setCon = new ApexPages.StandardSetController(new ProductsSelector().getAllProducts());
             }
             setcon.setPageSize(10);
             return setCon;
